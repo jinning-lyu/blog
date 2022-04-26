@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd api && npm install && npm start",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "start": "cd api && yarn && yarn start",
+    "heroku-postbuild": "cd client && yarn && yarn build"
   },
   "keywords": [],
   "author": "",
