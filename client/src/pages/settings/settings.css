@@ -1,0 +1,66 @@
+.settingsWrapper {
+  margin-left: 30%;
+  margin-right: 30%;
+  min-width: 350px;
+}
+
+.settingsTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settingsUpdateTitle {
+  font-size: 30px;
+  margin: 20px 0;
+  color: lightcoral;
+}
+
+.settingsDeleteTitle {
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.settingsDeleteTitle:hover {
+  text-decoration: underline;
+}
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsForm > label {
+  font-size: 20px;
+  margin-top: 20px;
+}
+.settingsForm > input {
+  color: grey;
+  margin: 10px 0;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+}
+
+.settingsSubmit {
+  width: 150px;
+  align-self: center;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  background-color: teal;
+  padding: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.settingsForm > input:focus {
+  outline: none;
+}
+
+.updateMessage {
+  color: grey;
+  text-align: center;
+  margin-top: 10px;
+  height: 30px;
+}

@@ -1,0 +1,121 @@
+.singlePost {
+  flex: 9;
+}
+
+.singlePostWrapper {
+  padding-top: 50px;
+  margin-left: 15%;
+  margin-right: 15%;
+  min-width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.singlePostImg {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.container {
+  position: relative;
+}
+.deleteImgIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 30px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.singlePostTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: "Lora", serif;
+  justify-content: space-between;
+  font-size: 30px;
+  padding-top: 20px;
+}
+
+.singlePostTitleInput {
+  flex: 1;
+  text-align: center;
+  font-family: "Lora", serif;
+  font-size: 30px;
+  border: none;
+}
+
+.singlePostTitleInput:focus {
+  outline: none;
+}
+
+.singlePostEdit {
+  float: right;
+  font-size: 20px;
+}
+
+.singlePostIcon {
+  margin-left: 10px;
+  cursor: pointer;
+  right: 0;
+}
+
+.singlePostIcon:first-child {
+  color: teal;
+}
+
+.singlePostIcon:last-child {
+  color: tomato;
+}
+
+.singlePostInfo {
+  display: flex;
+  font-size: 15px;
+  justify-content: space-between;
+  font-family: "Varela Round", sans-serif;
+  color: #b39656;
+  margin: 20px 0;
+}
+
+.singlePostDesc {
+  color: #666;
+  font-size: 20px;
+  line-height: 25px;
+  white-space: pre-wrap;
+  padding-bottom: 30px;
+}
+
+.singlePostDesc::first-letter {
+  font-size: 35px;
+  margin-left: 20px;
+  font-weight: 600;
+}
+
+.writeInput {
+  border: none;
+  font-size: 20px;
+  line-height: 25px;
+  padding: 0;
+}
+
+.writeInput:focus {
+  outline: none;
+}
+
+.writeText {
+  height: 30vh;
+  color: #666;
+  white-space: pre-wrap;
+}
+
+.singlePostButton {
+  color: white;
+  background-color: teal;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
