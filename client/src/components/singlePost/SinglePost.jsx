@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 
 export default function Single() {
-  const PF = window.location.origin + "/img/";
   const location = useLocation();
   const path = location.pathname.split("/").at(-1);
   const [post, setPost] = useState({});
@@ -18,41 +17,29 @@ export default function Single() {
   const { user } = useContext(Context);
 
   const handleUpdate = async () => {
-    if (file && typeof file !== "string") {
-      if (post.photo) {
-        axios.delete("/api/delete", { data: { filename: post.photo } });
+    const data = new FormData();
+    data.append("userID", user._id);
+    data.append("username", user.username);
+    data.append("title", title);
+    data.append("desc", desc);
+    if (file) {
+      if (typeof file !== "string") {
+        // file updated
+        data.append("deleteOldFile", true);
+        data.append("file", file);
       }
-      const data = new FormData();
-      const filename = Date.now() + "-" + file.name;
-      data.append("name", filename);
-      data.append("file", file);
-      post.photo = filename;
-      try {
-        await axios.post("/api/upload", data);
-      } catch (err) {}
-    } else if (!file) {
-      if (post.photo) {
-        axios.delete("/api/delete", { data: { filename: post.photo } });
-        post.photo = null;
-      }
+    } else {
+      // file deleted
+      data.append("deleteOldFile", true);
     }
     try {
-      await axios.put(`/api/posts/${post._id}`, {
-        userID: user._id,
-        username: user.username,
-        title,
-        desc,
-        photo: post.photo,
-      });
-      setUpdate(false);
+      await axios.put(`/api/posts/${post._id}`, data);
     } catch (err) {}
+    setUpdate(false);
   };
 
   const handleDelete = async () => {
     try {
-      if (post.photo) {
-        axios.delete("/api/delete", { data: { filename: post.photo } });
-      }
       await axios.delete(`/api/posts/${post._id}`, {
         data: { userID: user._id },
       });
@@ -60,10 +47,11 @@ export default function Single() {
     } catch (err) {}
   };
 
-  const imgObject = useMemo(() => {
-    return file && typeof file !== "string"
-      ? URL.createObjectURL(file)
-      : undefined;
+  const imgSrc = useMemo(() => {
+    if (file) {
+      return typeof file === "string" ? file : URL.createObjectURL(file);
+    }
+    return null;
   }, [file]);
 
   useEffect(() => {
@@ -80,14 +68,10 @@ export default function Single() {
   return (
     <div className="singlePost">
       <div className="singlePostWrapper">
-        {file && (
+        {imgSrc && (
           <div className="container">
             <label htmlFor={update ? "fileInput" : undefined}>
-              <img
-                src={typeof file === "string" ? PF + file : imgObject}
-                alt=""
-                className="singlePostImg"
-              />
+              <img src={imgSrc} alt="post image" className="singlePostImg" />
             </label>
             <input
               type="file"

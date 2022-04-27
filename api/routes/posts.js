@@ -1,9 +1,44 @@
+const aws = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const uuid = require("uuid");
+const path = require("path");
 const router = require("express").Router();
 const Post = require("../models/Post");
-//Create post
 
-router.post("/", async (req, res) => {
-  const newPost = new Post(req.body);
+aws.config.update({
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: "us-east-2",
+});
+
+const s3 = new aws.S3({ apiVersion: "2006-03-01" });
+
+const deletePhoto = (url) => {
+  const key = url.split("/").at(-1);
+  s3.deleteObject(
+    { Key: key, Bucket: process.env.S3_BUCKET_NAME },
+    function (err, data) {
+      if (err) {
+        console.log(err, err.stack);
+      }
+    }
+  );
+};
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET_NAME,
+    key: function (req, file, cb) {
+      cb(null, `${uuid.v4()}${path.extname(file.originalname)}`);
+    },
+  }),
+});
+
+//Create post
+router.post("/", upload.single("file"), async (req, res) => {
+  const newPost = new Post({ ...req.body, photo: req.file.location });
   try {
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
@@ -13,15 +48,24 @@ router.post("/", async (req, res) => {
 });
 
 //Update post
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.single("file"), async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (req.body.userID === post.userID) {
       try {
+        // delete old photo
+        const newPost = req.body;
+        if (post.photo && req.body.deleteOldFile) {
+          deletePhoto(post.photo);
+          newPost.photo = null;
+        }
+        if (req.file) {
+          newPost.photo = req.file.location;
+        }
         const updatedPost = await Post.findByIdAndUpdate(
           req.params.id,
           {
-            $set: req.body,
+            $set: newPost,
           },
           { new: true }
         );
@@ -43,6 +87,9 @@ router.delete("/:id", async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (req.body.userID === post.userID) {
       try {
+        if (post.photo) {
+          deletePhoto(post.photo);
+        }
         await post.delete();
         res.status(200).json("Post has been deleted.");
       } catch (err) {

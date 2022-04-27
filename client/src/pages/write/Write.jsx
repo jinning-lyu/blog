@@ -30,28 +30,24 @@ export default function Write() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newPost = {
-      username: user.username,
-      userID: user._id,
-      title,
-      desc,
-      categories: selectedCat,
-    };
+
+    const data = new FormData();
+    data.append("username", user.username);
+    data.append("userID", user._id);
+    data.append("title", title);
+    data.append("desc", desc);
+    data.append("categories", selectedCat);
 
     if (file) {
-      const data = new FormData();
-      const filename = Date.now() + "-" + file.name;
-      data.append("name", filename);
       data.append("file", file);
-      newPost.photo = filename;
 
-      try {
-        await axios.post("/api/upload", data);
-      } catch (err) {}
+      // try {
+      //   await axios.post("/api/upload", data);
+      // } catch (err) {}
     }
 
     try {
-      const res = await axios.post("/api/posts", newPost);
+      const res = await axios.post("/api/posts", data);
       window.location.replace("/post/" + res.data._id);
     } catch (err) {}
   };

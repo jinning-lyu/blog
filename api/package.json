@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "aws-sdk": "^2.1122.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.3.1",
     "multer": "^1.4.4",
-    "path": "^0.12.7"
+    "multer-s3": "^2.10.0",
+    "path": "^0.12.7",
+    "uuid": "^8.3.2"
   },
   "name": "api",
   "version": "1.0.0",
