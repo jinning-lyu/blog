@@ -11,7 +11,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 import "./singlepost.css";
-import { base } from "../../../../api/models/User";
 
 export default function Single() {
   const location = useLocation();
