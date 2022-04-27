@@ -1,4 +1,10 @@
-import { useState, useContext, useEffect, useMemo } from "react";
+import {
+  useState,
+  useLayoutEffect,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import LoadingOverlay from "react-loading-overlay";
 import axios from "axios";
 import { Context } from "../../context/Context";
@@ -51,8 +57,30 @@ export default function Write() {
     setIsLoading(false);
   };
 
+  useLayoutEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isLoading]);
+
   return (
-    <LoadingOverlay active={isLoading} spinner text="Publishing your post...">
+    <LoadingOverlay
+      active={isLoading}
+      spinner
+      text="Publishing your post..."
+      styles={{
+        wrapper: (base) => ({
+          ...base,
+          width: "100%",
+        }),
+        overlay: (base) => ({
+          ...base,
+          position: "fixed",
+        }),
+      }}
+    >
       <div className="write">
         {file && <img src={imgObject} alt="" className="writeImg"></img>}
         <form className="writeForm" onSubmit={handleSubmit}>

@@ -1,10 +1,17 @@
 import { useLocation } from "react-router";
-import { useEffect, useState, useContext, useMemo } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useContext,
+  useMemo,
+} from "react";
 import LoadingOverlay from "react-loading-overlay";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 import "./singlepost.css";
+import { base } from "../../../../api/models/User";
 
 export default function Single() {
   const location = useLocation();
@@ -74,8 +81,30 @@ export default function Single() {
     getPost();
   }, [path]);
 
+  useLayoutEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isLoading]);
+
   return (
-    <LoadingOverlay active={isLoading} spinner text={loadingText}>
+    <LoadingOverlay
+      active={isLoading}
+      spinner
+      text={loadingText}
+      styles={{
+        wrapper: (base) => ({
+          ...base,
+          width: "100%",
+        }),
+        overlay: (base) => ({
+          ...base,
+          position: "fixed",
+        }),
+      }}
+    >
       <div className="singlePost">
         <div className="singlePostWrapper">
           {imgSrc && (
