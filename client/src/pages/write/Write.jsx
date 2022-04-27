@@ -1,5 +1,5 @@
 import "./write.css";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import axios from "axios";
 import { Context } from "../../context/Context";
 
@@ -23,6 +23,10 @@ export default function Write() {
     };
     getCats();
   }, []);
+
+  const imgObject = useMemo(() => {
+    return file ? URL.createObjectURL(file) : undefined;
+  }, [file]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,12 +55,10 @@ export default function Write() {
       window.location.replace("/post/" + res.data._id);
     } catch (err) {}
   };
+
   return (
     <div className="write">
-      {file && (
-        <img src={URL.createObjectURL(file)} alt="" className="writeImg"></img>
-      )}
-
+      {file && <img src={imgObject} alt="" className="writeImg"></img>}
       <form className="writeForm" onSubmit={handleSubmit}>
         <div className="writeFormGroup">
           <label htmlFor="fileInput">

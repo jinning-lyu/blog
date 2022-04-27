@@ -1,5 +1,5 @@
 import { useLocation } from "react-router";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useMemo } from "react";
 import "./singlepost.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -60,6 +60,10 @@ export default function Single() {
     } catch (err) {}
   };
 
+  const imgObject = useMemo(() => {
+    return file ? URL.createObjectURL(file) : undefined;
+  }, [file]);
+
   useEffect(() => {
     const getPost = async () => {
       const res = await axios.get("/api/posts/" + path);
@@ -78,11 +82,7 @@ export default function Single() {
           <div className="container">
             <label htmlFor={update ? "fileInput" : undefined}>
               <img
-                src={
-                  typeof file === "string"
-                    ? PF + file
-                    : URL.createObjectURL(file)
-                }
+                src={typeof file === "string" ? PF + file : imgObject}
                 alt=""
                 className="singlePostImg"
               />
