@@ -117,6 +117,7 @@ export default function Single() {
                 id="fileInput"
                 style={{ display: "none" }}
                 onChange={(e) => setFile(e.target.files[0])}
+                accept="image/png, image/jpeg"
               />
               {update && (
                 <i
@@ -138,6 +139,7 @@ export default function Single() {
                     id="fileInput"
                     style={{ display: "none" }}
                     onChange={(e) => setFile(e.target.files[0])}
+                    accept="image/png, image/jpeg"
                   />
                 </div>
               )}

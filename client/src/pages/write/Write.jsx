@@ -93,7 +93,8 @@ export default function Write() {
               id="fileInput"
               style={{ display: "none" }}
               onChange={(e) => setFile(e.target.files[0])}
-            ></input>
+              accept="image/png, image/jpeg"
+            />
             <input
               type="text"
               placeholder="Title"
