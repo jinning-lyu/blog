@@ -1,7 +1,8 @@
-import "./write.css";
 import { useState, useContext, useEffect, useMemo } from "react";
+import LoadingOverlay from "react-loading-overlay";
 import axios from "axios";
 import { Context } from "../../context/Context";
+import "./write.css";
 
 export default function Write() {
   const [title, setTitle] = useState("");
@@ -10,6 +11,7 @@ export default function Write() {
   const { user } = useContext(Context);
   const [cat, setCat] = useState([]);
   const [selectedCat, selectCat] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSelect = (e) => {
     let value = Array.from(e.target.selectedOptions, (option) => option.value);
@@ -30,7 +32,7 @@ export default function Write() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const data = new FormData();
     data.append("username", user.username);
     data.append("userID", user._id);
@@ -40,60 +42,59 @@ export default function Write() {
 
     if (file) {
       data.append("file", file);
-
-      // try {
-      //   await axios.post("/api/upload", data);
-      // } catch (err) {}
     }
 
     try {
       const res = await axios.post("/api/posts", data);
       window.location.replace("/post/" + res.data._id);
     } catch (err) {}
+    setIsLoading(false);
   };
 
   return (
-    <div className="write">
-      {file && <img src={imgObject} alt="" className="writeImg"></img>}
-      <form className="writeForm" onSubmit={handleSubmit}>
-        <div className="writeFormGroup">
-          <label htmlFor="fileInput">
-            <i className="writeIcon fa-solid fa-file-circle-plus"></i>
-          </label>
-          <input
-            type="file"
-            id="fileInput"
-            style={{ display: "none" }}
-            onChange={(e) => setFile(e.target.files[0])}
-          ></input>
-          <input
-            type="text"
-            placeholder="Title"
-            className="writeTitle"
-            autoFocus={true}
-            maxLength="70"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <button className="writeSubmit" type="submit">
-            Publish
-          </button>
-        </div>
-        <div>
-          <select multiple size="1" onChange={handleSelect}>
-            {cat.map((c) => (
-              <option value={c.name}>{c.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="writeFormGroup">
-          <textarea
-            type="text"
-            placeholder="Tell your story..."
-            className="writeInput writeText"
-            onChange={(e) => setDesc(e.target.value)}
-          ></textarea>
-        </div>
-      </form>
-    </div>
+    <LoadingOverlay active={isLoading} spinner text="Publishing your post...">
+      <div className="write">
+        {file && <img src={imgObject} alt="" className="writeImg"></img>}
+        <form className="writeForm" onSubmit={handleSubmit}>
+          <div className="writeFormGroup">
+            <label htmlFor="fileInput">
+              <i className="writeIcon fa-solid fa-file-circle-plus"></i>
+            </label>
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: "none" }}
+              onChange={(e) => setFile(e.target.files[0])}
+            ></input>
+            <input
+              type="text"
+              placeholder="Title"
+              className="writeTitle"
+              autoFocus={true}
+              maxLength="70"
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <button className="writeSubmit" type="submit">
+              Publish
+            </button>
+          </div>
+          <div>
+            <select multiple size="1" onChange={handleSelect}>
+              {cat.map((c) => (
+                <option value={c.name}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="writeFormGroup">
+            <textarea
+              type="text"
+              placeholder="Tell your story..."
+              className="writeInput writeText"
+              onChange={(e) => setDesc(e.target.value)}
+            ></textarea>
+          </div>
+        </form>
+      </div>
+    </LoadingOverlay>
   );
 }
