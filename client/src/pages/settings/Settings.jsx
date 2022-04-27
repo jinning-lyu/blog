@@ -17,7 +17,7 @@ export default function Settings() {
     e.preventDefault();
     dispatch({ type: "UPDATE_START" });
     try {
-      const res = await axios.put("/users/" + user._id, {
+      const res = await axios.put("/api/users/" + user._id, {
         userID: user._id,
         username,
         email,
@@ -34,7 +34,7 @@ export default function Settings() {
     e.preventDefault();
 
     try {
-      await axios.delete(`/users/${user._id}`, {
+      await axios.delete(`/api/users/${user._id}`, {
         data: { userID: user._id },
       });
       dispatch({ type: "LOGOUT" });
@@ -49,7 +49,7 @@ export default function Settings() {
         setError("Invalid password.");
       } else {
         try {
-          await axios.put("/users/" + user._id, {
+          await axios.put("/api/users/" + user._id, {
             userID: user._id,
             password: old,
             newPwd: pwd,

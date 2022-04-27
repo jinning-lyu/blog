@@ -20,7 +20,7 @@ export default function Single() {
   const handleUpdate = async () => {
     if (file && typeof file !== "string") {
       if (post.photo) {
-        axios.delete("/delete", { data: { filename: post.photo } });
+        axios.delete("/api/delete", { data: { filename: post.photo } });
       }
       const data = new FormData();
       const filename = Date.now() + "-" + file.name;
@@ -28,16 +28,16 @@ export default function Single() {
       data.append("file", file);
       post.photo = filename;
       try {
-        await axios.post("/upload", data);
+        await axios.post("/api/upload", data);
       } catch (err) {}
     } else if (!file) {
       if (post.photo) {
-        axios.delete("/delete", { data: { filename: post.photo } });
+        axios.delete("/api/delete", { data: { filename: post.photo } });
         post.photo = null;
       }
     }
     try {
-      await axios.put(`/posts/${post._id}`, {
+      await axios.put(`/api/posts/${post._id}`, {
         userID: user._id,
         username: user.username,
         title,
@@ -51,9 +51,9 @@ export default function Single() {
   const handleDelete = async () => {
     try {
       if (post.photo) {
-        axios.delete("/delete", { data: { filename: post.photo } });
+        axios.delete("/api/delete", { data: { filename: post.photo } });
       }
-      await axios.delete(`/posts/${post._id}`, {
+      await axios.delete(`/api/posts/${post._id}`, {
         data: { userID: user._id },
       });
       window.location.replace("/");
@@ -62,7 +62,7 @@ export default function Single() {
 
   useEffect(() => {
     const getPost = async () => {
-      const res = await axios.get("/posts/" + path);
+      const res = await axios.get("/api/posts/" + path);
       setPost(res.data);
       setTitle(res.data.title);
       setDesc(res.data.desc);
