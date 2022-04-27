@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 
 export default function Single() {
-  const PF = "http://localhost:3001/img/";
+  const PF = window.location.origin + "/img/";
   const location = useLocation();
   const path = location.pathname.split("/").at(-1);
   const [post, setPost] = useState({});
@@ -61,7 +61,9 @@ export default function Single() {
   };
 
   const imgObject = useMemo(() => {
-    return file ? URL.createObjectURL(file) : undefined;
+    return file && typeof file !== "string"
+      ? URL.createObjectURL(file)
+      : undefined;
   }, [file]);
 
   useEffect(() => {
