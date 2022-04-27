@@ -5,7 +5,6 @@ import { Context } from "../../context/Context";
 import axios from "axios";
 
 export default function Login() {
-  let history = useNavigate();
   const emailRef = useRef();
   const passwordRef = useRef();
   const { dispatch, isFetching } = useContext(Context);
@@ -22,6 +21,7 @@ export default function Login() {
       });
       setError(false);
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      window.location.replace("/");
     } catch (err) {
       setError(true);
       setMsg(err.response.data);
